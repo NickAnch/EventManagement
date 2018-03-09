@@ -66,10 +66,13 @@
         public static function getAvailableOrganizedMeetings($userId,$invitedId){
           $userId = intval($userId);
           $db = Db::getConnection();
+          $OrgMeetings = array();
 
-          $query = 'SELECT * FROM meetings WHERE meetings.id '
-                .' NOT IN (SELECT meeting_id FROM invitations WHERE creator_id = '.$userId.'AND invited_id='.$invitedId.') AND '
-                .' NOT IN (SELECT meeting_id FROM participants WHERE user_id= '.$invitedId.');';
+          $query = 'SELECT * FROM meetings WHERE creater_id='.$userId.' AND meetings.id '
+                .' NOT IN (SELECT participants.meeting_id FROM participants WHERE user_id= '.$invitedId.') '
+                .' AND  meetings.id NOT IN (SELECT invitations.meeting_id FROM invitations '
+                .' WHERE invited_id= '.$invitedId.' and creator_id='.$userId.');';
+          echo $query;
           $result = $db->query($query);
 
           $i=0;

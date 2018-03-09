@@ -25,6 +25,15 @@ class ProfileController{
     return true;
   }
 
+  public function actionEventNotifications(){
+    
+    $userId = User::checkLogged();
+    $notificationsList = User::getNotifications($userId);
+
+    require_once(ROOT. '/views/profile/eventNotifications.php');
+    return true;
+  }
+
   public function actionDeleteInterest($id){
 
     $userId = User::checkLogged();

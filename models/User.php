@@ -160,6 +160,38 @@ class User{
 
       }
 
+      public static function getNotifications($userId){
+        $db = Db::getConnection();
+        $notificationsList = array();
+
+        $query = 'SELECT invitations.meeting_id,meetings.creater_id,meetings.title, meetings.description,users.name,users.surname  FROM meetings INNER JOIN invitations '
+        .'ON meetings.id = invitations.meeting_id '
+        .'INNER JOIN users ON users.id = meetings.creater_id WHERE invitations.invited_id='.$userId.' ;';
+        $result = $db->query($query);
+      //  .'ON users.id = invitations.creater_id WHERE invitations.invited_id='.$userId.' '
+        $i=0;
+        while($row = $result->fetch()){
+          $notificationsList[$i]['creater_id'] = $row['creater_id'];
+          $notificationsList[$i]['name'] = $row['name'];
+          $notificationsList[$i]['surname'] = $row['surname'];
+          $notificationsList[$i]['meeting_id'] = $row['meeting_id'];
+          $notificationsList[$i]['title'] = $row['title'];
+          $notificationsList[$i]['description'] = $row['description'];
+          $i++;
+        }
+
+        return $notificationsList;
+      }
+
+      public static function isInvitedOnMeeup($userId,$id){
+        $db = Db::getConnection();
+
+        $sql = 'SELECT COUNT(*) as count FROM invitations WHERE invited_id ='.$userId.' AND meeting_id ='.$id.';';
+        $result = $db->prepare($sql);
+        $result->execute();
+        return $result->fetchAll();
+      }
+
 }
 
 ?>

@@ -12,6 +12,7 @@ return array(
     'user/logout' => 'user/logout',
     'profile' => 'profile/index',
     'manageInterests' => 'profile/manageInterests',
+    'eventNotifications' => 'profile/eventNotifications',
     'deleteInterest/([0-9]+)' => 'profile/deleteInterest/$1',
     'addInterest/([0-9]+)' => 'profile/addInterest/$1',
 

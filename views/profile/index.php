@@ -9,7 +9,8 @@
     <?php include ROOT.'/views/layout/header.php';?>
     <h1>Личный профиль</h1>
     <p>Здравствуйте, <?php echo $user['name'].' '. $user['surname']. '!'?></p>
-    <a href="/manageInterests/">Редактировать инетересы</a>
+    <a href="/manageInterests/">Редактировать инетересы</a> <br>
+    <a href="/eventNotifications/">Оповещения</a>
     <p>Ваши интересы: </p>
     <ul class="listOfInterests">
       <?php echo $themes; ?>
