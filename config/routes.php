@@ -4,6 +4,8 @@ return array(
     'meetings/page-([0-9]+)' => 'meetings/index/$1',
     'meetings' => 'meetings/index', // actionIndex in MeetingsController
 
+    'inviteUser/([0-9]+)' => 'user/inviteUser/$1',
+    'addInvitedMember/([0-9]+)/([0-9]+)' => 'user/addInvitedMember/$1/$2',
     'user/([0-9]+)' => 'user/view/$1',
     'user/register' => 'user/register',
     'user/login' => 'user/login',

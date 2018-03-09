@@ -1,5 +1,6 @@
 <?php
   include_once ROOT. '/models/User.php';
+  include_once ROOT. '/models/Meetings.php';
 
   class UserController{
 
@@ -11,12 +12,32 @@
           if($id == $userId){
             header("Location: /profile/");
           }
-          
+
           echo $userId;
           require_once(ROOT . '/views/user/view.php');
 
       }
       return true;
+    }
+
+    public function actionInviteUser($invitedId){
+      $userId = User::checkLogged();
+      $meetingsList = array();
+      $meetingsList = Meetings::getAvailableOrganizedMeetings($userId,$invitedId);
+      echo $userId;
+      echo $invitedId;
+      print_r ($meetingsList);
+
+      require_once(ROOT . '/views/user/inviteUser.php');
+      return true;
+    }
+
+    public function actionAddInvitedMember($meetId,$invitedId){
+      $userId = User::checkLogged();
+      User::addInvitedMember($userId, $meetId, $invitedId);
+
+      $referrer = $_SERVER['HTTP_REFERER'];
+      header("Location: $referrer");
     }
 
 

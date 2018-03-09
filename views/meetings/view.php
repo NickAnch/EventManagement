@@ -16,6 +16,11 @@
         <?php include ROOT.'/views/layout/header.php';?>
         <h1><?php echo $meetingItem['title']?></h1>
         <div>
+            <?php if($meetingItem['closeMeetup'] == 0): ?>
+              <p><b>Это открытое мероприятие</b></p>
+            <?php else: ?>
+              <p><b>Это закрытое мероприятие</b></p>
+            <?php endif; ?>
             <p><b>Время:</b> <?php echo $meetingItem['date'] ?> </p>
             <p><b>Описание: </b> <?php echo $meetingItem['description'] ?> </p>
             <?php if($member[0]['count'] == 0): ?>

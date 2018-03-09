@@ -63,6 +63,26 @@
 
         }
 
+        public static function getAvailableOrganizedMeetings($userId,$invitedId){
+          $userId = intval($userId);
+          $db = Db::getConnection();
+
+          $query = 'SELECT * FROM meetings WHERE meetings.id '
+                .' NOT IN (SELECT meeting_id FROM invitations WHERE creator_id = '.$userId.'AND invited_id='.$invitedId.') AND '
+                .' NOT IN (SELECT meeting_id FROM participants WHERE user_id= '.$invitedId.');';
+          $result = $db->query($query);
+
+          $i=0;
+          while($row = $result->fetch()){
+              $OrgMeetings[$i]['id'] = $row['id'];
+              $OrgMeetings[$i]['title'] = $row['title'];
+              $OrgMeetings[$i]['description'] = $row['description'];
+              $i++;
+
+          }
+          return $OrgMeetings;
+        }
+
         public static function getUsersOfMeeting($id){
             $id = intval($id);
             if($id){

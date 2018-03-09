@@ -90,6 +90,17 @@ class User{
         return $result->execute();
     }
 
+    public static function addInvitedMember($userId, $meetId, $invitedId){
+      $db = Db::getConnection();
+
+      $sql = 'INSERT INTO invitations (creator_id, invited_id, meeting_id) '
+                 . ' VALUES ('.$userId.', '.$invitedId.','.$meetId.');';
+
+      $result = $db->prepare($sql);
+      return $result->execute();
+    }
+
+
     public static function deleteInterest($id, $userId){
         $db = Db::getConnection();
         $interestsList = array();
