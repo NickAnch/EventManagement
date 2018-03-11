@@ -9,11 +9,15 @@
     <?php include ROOT.'/views/layout/header.php';?>
     <h1>Личный профиль</h1>
     <p>Здравствуйте, <?php echo $user['name'].' '. $user['surname']. '!'?></p>
-    <a href="/manageInterests/">Редактировать инетересы</a> <br>
+    <a href="/manageInterests/" class="button">Редактировать инетересы</a> <br>
     <a href="/eventNotifications/">Оповещения</a>
     <p>Ваши интересы: </p>
     <ul class="listOfInterests">
-      <?php echo $themes; ?>
+      <?php foreach ($themes as $value): ?>
+        <li class= "itemOfInterest">
+          <p><?php echo $value['id'] .' '. $value['name_interest'].' ' ?> </p>
+        </li>
+      <?php endforeach; ?>
     </ul>
     <p>Организатор:</p>
     <ul>

@@ -28,9 +28,9 @@
                 <p><b>Время:</b> <?php echo $meetingItem['date'] ?> </p>
                 <p><b>Описание: </b> <?php echo $meetingItem['description'] ?> </p>
                 <?php if($member[0]['count'] == 0): ?>
-                <div class="manageMembers"><a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb">Я пойду</a></div>
+                <div class="manageMembers"><a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb btn btn-success">Я пойду</a></div>
                 <?php else: ?>
-                <div class="manageMembers"><a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb">Я не пойду</a></div>
+                <div class="manageMembers"><a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb btn btn-danger">Я не пойду</a></div>
                 <?php endif; ?>
                 <p><b>Полный адрес:</b><?php echo $meetingItem['place'] ?></p>
                 <b>Расположение на карте:</b>
@@ -50,7 +50,7 @@
             </ul>
           </div>
           <?php endif; ?>
-        <a href="/meetings">Все мероприятия</a>
+        <a href="/meetings" class="btn btn-info">Все мероприятия</a>
     <script>
       function initMap() {
         var uluru = {lat: <?php echo $meetingItem['lat']?>, lng: <?php echo $meetingItem['lng']?>};

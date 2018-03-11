@@ -10,15 +10,25 @@
     <h1>Управление интересами</h1>
     <p>Вы можете добавить интересы:</p>
     <ul class="availableInterests">
-      <?php echo $themesAvail; ?>
+      <?php foreach($themesAvail as $val): ?>
+        <li class= "itemOfAvailable">
+          <?php echo $val['id'] .' '. $val['name_interest'].' ' ?>
+          <a href="/addInterest/<?php echo $val['id'];?>" class="addInt">Добавить</a>
+        </li>
+      <?php endforeach; ?>
     </ul>
     <p>Ваши интересы: </p>
     <ul class="listOfInterests">
-      <?php echo $themes; ?>
+      <?php foreach ($themes as $value): ?>
+        <li class= "itemOfInterest">
+          <?php echo $value['id'] .' '. $value['name_interest'].' ' ?>
+          <a href="/deleteInterest/<?php echo $value['id'];?>" class="deleteInt">Удалить</a>
+        </li>
+      <?php endforeach; ?>
     </ul>
     <script>
       $(document).ready(function(){
-        $(document.body).on("click",".deleteInt", function(){
+        $(document.body).on("click",".deleteIntt", function(){
           var id = $(this).attr("data-id");
           $.post("/deleteInterest/"+id, {}, function (data){
 
@@ -30,7 +40,7 @@
           return false;
         });
 
-        $(document.body).on("click",".addInt", function(){
+        $(document.body).on("click",".addIntt", function(){
           var id = $(this).attr("data-id");
           $.post("/addInterest/"+id, {}, function (data){
 

@@ -105,7 +105,8 @@ class User{
         $db = Db::getConnection();
         $interestsList = array();
 
-        $sql = 'DELETE FROM chosen_interests WHERE user_id ='.$userId.' and id='.$id .';';
+        $sql = 'DELETE FROM chosen_interests WHERE user_id ='.$userId.' and interest_id='.$id .';';
+        
         $result = $db->prepare($sql);
 
         return $result->execute();
@@ -114,32 +115,38 @@ class User{
       public static function getChosenInterests($userId){
         $userId = intval($userId);
         $db = Db::getConnection();
+        $interestsList = array();
 
-        $query = 'SELECT interests.name_interest, chosen_interests.id FROM interests INNER JOIN chosen_interests '
+        $query = 'SELECT interests.name_interest, interests.id FROM interests INNER JOIN chosen_interests '
                 .' ON interests.id = chosen_interests.interest_id WHERE chosen_interests.user_id = '.$userId.' ;';
         $result = $db->query($query);
-        $string = '';
-        while($row = $result->fetch(PDO::FETCH_OBJ)){
-          $string .= '<li class= "itemOfInterest">'.$row->id.' ';
-          $string .= $row->name_interest.'<a href="#" data-id="'.$row->id.'" class="deleteInt">Удалить</a></li>';
+
+        $i=0;
+        while($row = $result->fetch()){
+          $interestsList[$i]['id'] = $row['id'];
+          $interestsList[$i]['name_interest'] = $row['name_interest'];
+          $i++;
         }
-        return $string;
+
+        return $interestsList;
       }
 
       public static function getAvailableInterests($userId){
         $userId = intval($userId);
         $db = Db::getConnection();
+        $interestsList = array();
 
         $query = 'SELECT * FROM interests WHERE interests.id NOT IN '
               .' (SELECT interest_id FROM chosen_interests WHERE user_id = '.$userId.');';
         $result = $db->query($query);
-        $string = '';
-        while($row = $result->fetch(PDO::FETCH_OBJ)){
-          $string .= '<li class= "itemOfAvailable">'.$row->id.' ';
-          $string .= $row->name_interest.'<a href="#" data-id="'.$row->id.'" class="addInt">Добавить</a></li>';
+        $i=0;
+        while($row = $result->fetch()){
+        $interestsList[$i]['id'] = $row['id'];
+        $interestsList[$i]['name_interest'] = $row['name_interest'];
+        $i++;
+        }
 
-          }
-        return $string;
+        return $interestsList;
       }
 
       public static function getAllInterests(){
@@ -164,11 +171,12 @@ class User{
         $db = Db::getConnection();
         $notificationsList = array();
 
-        $query = 'SELECT invitations.meeting_id,meetings.creater_id,meetings.title, meetings.description,users.name,users.surname  FROM meetings INNER JOIN invitations '
+        $query = 'SELECT invitations.meeting_id,meetings.creater_id,meetings.title, '
+        .'meetings.description,users.name,users.surname  FROM meetings INNER JOIN invitations '
         .'ON meetings.id = invitations.meeting_id '
         .'INNER JOIN users ON users.id = meetings.creater_id WHERE invitations.invited_id='.$userId.' ;';
         $result = $db->query($query);
-      //  .'ON users.id = invitations.creater_id WHERE invitations.invited_id='.$userId.' '
+
         $i=0;
         while($row = $result->fetch()){
           $notificationsList[$i]['creater_id'] = $row['creater_id'];

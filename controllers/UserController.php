@@ -12,7 +12,9 @@
           if($id == $userId){
             header("Location: /profile/");
           }
-
+          $OrgMeetings = Meetings::getOrganizedMeetings($id);
+          $Meetings = Meetings::getPersonsMeetings($id);
+          $themes = User::getChosenInterests($id);
           echo $userId;
           require_once(ROOT . '/views/user/view.php');
 

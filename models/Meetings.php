@@ -203,6 +203,7 @@
           $db = Db::getConnection();
 
           $sql = 'DELETE FROM participants WHERE user_id ='.$userId.' and meeting_id='.$id .';';
+
           $result = $db->prepare($sql);
           return $result->execute();
         }
@@ -211,6 +212,30 @@
           $db = Db::getConnection();
 
           $sql = 'SELECT COUNT(*) as count FROM participants WHERE user_id ='.$userId.' and meeting_id='.$id .';';
+          $result = $db->prepare($sql);
+          $result->execute();
+          return $result->fetchAll();
+        }
+
+        public static function getRecMeetings($city,$int_id){
+          $db = Db::getConnection();
+
+          $sql = 'SELECT id,title,description FROM meetings WHERE theme='.$int_id.' and city="'.$city.'" and closeMeetup=0;';
+
+          $result = $db->query($sql);
+          $string = '';
+          while($row = $result->fetch(PDO::FETCH_OBJ)){
+          $string .= '<li><p>'.$row->title.'</p> ';
+          $string .= '<p>'.$row->description.'</p> <a href="/meetings/'.$row->id.'">Подробнее</a></li>';
+          }
+          return $string;
+        }
+
+        public static function getCountOfRecMeetings($valueId,$city){
+          $db = Db::getConnection();
+
+          $sql = 'SELECT COUNT(*) as count FROM meetings WHERE theme='.$valueId.' and city="'.$city.'" and closeMeetup=0;';
+
           $result = $db->prepare($sql);
           $result->execute();
           return $result->fetchAll();

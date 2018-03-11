@@ -26,7 +26,7 @@ class ProfileController{
   }
 
   public function actionEventNotifications(){
-    
+
     $userId = User::checkLogged();
     $notificationsList = User::getNotifications($userId);
 
@@ -38,23 +38,17 @@ class ProfileController{
 
     $userId = User::checkLogged();
     User::deleteInterest($id, $userId);
-    $chosenInterests = User::getChosenInterests($userId);
-    $availableInterests = User::getAvailableInterests($userId);
 
-    echo $chosenInterests;
-    echo $availableInterests;
-    return true;
+    $referrer = $_SERVER['HTTP_REFERER'];
+    header("Location: $referrer");
   }
   public function actionAddInterest($id){
 
     $userId = User::checkLogged();
     User::addInterest($userId, $id);
-    $chosenInterests = User::getAvailableInterests($userId);
-    $availableInterests = User::getChosenInterests($userId);
 
-    echo $chosenInterests;
-    echo $availableInterests;
-    return true;
+    $referrer = $_SERVER['HTTP_REFERER'];
+    header("Location: $referrer");
   }
 }
 

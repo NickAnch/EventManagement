@@ -65,6 +65,32 @@ class MeetingsController {
       return true;
     }
 
+    public function actionRecommendation(){
+      $userId = User::checkLogged();
+      $user = User::getUserById($userId);
+      $city = $user['city'];
+      $themes = User::getChosenInterests($userId);
+      $i = 0;
+      foreach ($themes as $val){
+        $valueId = $val['id'];
+        $count[$i] = Meetings::getCountOfRecMeetings($valueId,$city);
+        $i++;
+      }
+      require_once(ROOT . '/views/meetings/recommendation.php');
+      return true;
+    }
+
+    public function actionGetRecommendedMeetings($int_id){
+
+        $userId = User::checkLogged();
+        $user = User::getUserById($userId);
+        $city = $user['city'];
+        $listMeetings = Meetings::getRecMeetings($city,$int_id);
+
+        echo $listMeetings;
+        return true;
+    }
+
     public function actionAddMember($id){
       $userId = User::checkLogged();
       Meetings::addMember($userId, $id);

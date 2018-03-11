@@ -17,6 +17,8 @@ return array(
     'addInterest/([0-9]+)' => 'profile/addInterest/$1',
 
     'createMeeting' => 'meetings/create',
+    'getRecommendedMeetings/([0-9]+)' => 'meetings/getRecommendedMeetings/$1',
+    'recommendation' => 'meetings/recommendation',
     'addMember/([0-9]+)' => 'meetings/addMember/$1',
     'deleteMember/([0-9]+)' => 'meetings/deleteMember/$1',
 

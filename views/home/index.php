@@ -2,11 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Document</title>
 </head>
 <body>
    <?php include ROOT.'/views/layout/header.php';?>
-    <h1>ГЛАВНАЯ СТРАНИЦА</h1>
+   <div class="container">
+    <h1>Управление мероприятиями</h1>
     <h2>Последние созданные мероприятия:</h2>
     <?php foreach ($meetingsLatestList as $meetingItem): ?>
     <div>
@@ -25,6 +27,6 @@
 
 
     Вы находитесь: <input type='text' name='city' id='user-city' value='' />
-          
+    </div>
 </body>
 </html>
