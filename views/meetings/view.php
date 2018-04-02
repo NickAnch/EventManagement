@@ -1,71 +1,147 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-
-        <title><?php echo $meetingItem['title']?></title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <style>
-       #map {
-         width: 200px;
-         height: 200px;
-       }
-    </style>
-    </head>
-    <body>
-        <?php include ROOT.'/views/layout/header.php';?>
-        <h1><?php echo $meetingItem['title']?></h1>
-        <?php if($meetingItem['closeMeetup'] == 1 && $isInvited[0]['count'] == 0 && $organizer[0]['creater_id'] != $userId): ?>
-          <p>Это закрытое мероприятие, его просмотр возможен только по приглашению</p>
-        <?php else: ?>
-          <div>
-            <div>
-                <?php if($meetingItem['closeMeetup'] == 0): ?>
-                  <p><b>Это открытое мероприятие</b></p>
-                <?php else: ?>
-                  <p><b>Это закрытое мероприятие</b></p>
-                <?php endif; ?>
-                <p><b>Время:</b> <?php echo $meetingItem['date'] ?> </p>
-                <p><b>Описание: </b> <?php echo $meetingItem['description'] ?> </p>
-                <?php if($member[0]['count'] == 0): ?>
-                <div class="manageMembers"><a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb btn btn-success">Я пойду</a></div>
-                <?php else: ?>
-                <div class="manageMembers"><a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb btn btn-danger">Я не пойду</a></div>
-                <?php endif; ?>
-                <p><b>Полный адрес:</b><?php echo $meetingItem['place'] ?></p>
-                <b>Расположение на карте:</b>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><?php echo $meetingItem['title']?></title>
+    <link rel="stylesheet" href="/template/css/bootstrap.css">
+    <style>
+     #map {
+       width: 100%;
+       height: 425px;
+     }
+     .card-img-top {
+        color: #fff;
+        height: 22rem;
+        background: url(/template/img/im.jpg) center no-repeat;
+        background-size: cover;
+      }
+      .addMemb,
+      .delMemb {
+        margin-top: 20px;
+      }
+      .descr{
+        margin-top: 10px;
+      }
+      </style>
+</head>
+<body>
+  <?php include ROOT.'/views/layout/header.php';?>
+  <div class="container">
+  <h1><?php echo $meetingItem['title']?></h1>
+  <?php if($meetingItem['closeMeetup'] == 1 && $isInvited[0]['count'] == 0 && $organizer[0]['creater_id'] != $userId): ?>
+    <p>Это закрытое мероприятие, его просмотр возможен только по приглашению</p>
+  <?php else: ?>
+    <div>
+      <section>
+        <div class="card">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card-img-top">
+              </div>
             </div>
-            <div id="map"></div>
-            <p><b>Участники:</b></p>
-            <ul>
-            <?php foreach ($usersList as $value): ?>
-              <li><a href="/user/<?php echo $value['user_id'];?>"><?php echo $value['name'].' '.$value['surname'];?> </a></li>
-            <?php endforeach; ?>
-            </ul>
-            <p><b>Организатор:</b></p>
-            <ul>
-            <?php foreach ($organizer as $value): ?>
-              <li><a href="/user/<?php echo $value['creater_id'];?>"><?php echo $value['name'].' '.$value['surname'];?> </a></li>
-            <?php endforeach; ?>
+            <div class="col-md-6">
+              <div class="card-body">
+                <?php if($meetingItem['closeMeetup'] == 0): ?>
+                  <p class="card-text"><b>Это открытое мероприятие</b></p>
+                <?php else: ?>
+                  <p class="card-text"><b>Это закрытое мероприятие</b></p>
+                <?php endif; ?>
+                <p class="card-text"><b>Время: </b> <?php echo $meetingItem['date'] ?> </p>
+                <p class="card-text"><b>Организатор:</b>
+                  <a  href="/user/<?php echo $organizer[0]['creater_id'];?>">
+                    <?php echo $organizer[0]['name'].' '.$organizer[0]['surname'];?>
+                  </a>
+                </p>
+                <p class="card-text"><b>Полный адрес: </b><?php echo $meetingItem['place'] ?></p>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter" >
+                  Посмотреть на карте
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Карта</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div id="map"></div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php if($userId): ?>
+                <div>
+                  <?php if($member[0]['count'] == 0): ?>
+                  <div class="manageMembers">
+                    <a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb btn btn-success ">Я пойду</a>
+                  </div>
+                  <?php else: ?>
+                  <div class="manageMembers">
+                    <a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb btn btn-danger">Я не пойду</a>
+                  </div>
+                  <?php endif; ?>
+                </div>
+                <?php else: ?>
+                  <p>Для того, чтобы пойти на мероприятие , необходимо войти в систему: <a href="/user/login">Авторизация</a></p>
+              <?php endif; ?>
+                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="card descr">
+        <div class="row">
+          <div class="col-12">
+            <div class="card-header">
+              Описание
+            </div>
+            <div class="card-body">
+              <p><?php echo $meetingItem['description'] ?></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card descr" >
+        <div class="row">
+          <div class="col-12">
+            <div class="card-header">
+              Участники
+            </div>
+            <ul class="list-group list-group-flush">
+              <?php foreach ($usersList as $value): ?>
+                <li class="list-group-item"><a href="/user/<?php echo $value['user_id'];?>"><?php echo $value['name'].' '.$value['surname'];?> </a></li>
+              <?php endforeach; ?>
             </ul>
           </div>
-          <?php endif; ?>
-        <a href="/meetings" class="btn btn-info">Все мероприятия</a>
-    <script>
-      function initMap() {
-        var uluru = {lat: <?php echo $meetingItem['lat']?>, lng: <?php echo $meetingItem['lng']?>};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 16,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-      }
-    </script>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAFnBJcgPWmhAtB6KIaEc63gZUz3i0jrZk&callback=initMap"></script>
-    <script>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
+  </div>
+
+  <?php include ROOT.'/views/layout/footer.php';?>
+  <script>
+    function initMap() {
+      var uluru = {lat: <?php echo $meetingItem['lat']?>, lng: <?php echo $meetingItem['lng']?>};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 16,
+        center: uluru
+      });
+      var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+      });
+    }
+  </script>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAFnBJcgPWmhAtB6KIaEc63gZUz3i0jrZk&callback=initMap"></script>
+  <script>
     $(document).ready(function(){
       $(document.body).on("click",".addMeymb", function(){
         var id = $(this).attr("data-id");
@@ -83,6 +159,6 @@
         return false;
       });
     });
-    </script>
-    </body>
+  </script>
+</body>
 </html>

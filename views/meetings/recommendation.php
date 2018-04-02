@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Мероприятия</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Рекомендации</title>
+  <link rel="stylesheet" href="/template/css/bootstrap.css">
 </head>
 <body>
-    <?php include ROOT.'/views/layout/header.php';?>
+  <?php include ROOT.'/views/layout/header.php';?>
+  <div class="container">
     <h1>Рекомендации</h1>
     <p>Ваши интересы: </p>
     <ul class="listOfInterests">
@@ -24,21 +25,26 @@
         <p>Выберите тематику!</p>
       </ul>
     </div>
-    <script>
-      $(document).ready(function(){
-        $(document.body).on("click",".selectInt", function(){
-          var id = $(this).attr("data-id");
-          $.post("/getRecommendedMeetings/"+id, {}, function (data){
+  </div>
+  
+  <?php include ROOT.'/views/layout/footer.php';?>
 
-            if(!data){
-              $(".listOfMeetings").html('По данной теме нет никаких мероприятий');
-            } else {
-            $(".listOfMeetings").html(data);
-          }
-          });
-          return false;
+  <script>
+    $(document).ready(function(){
+      $(document.body).on("click",".selectInt", function(){
+        var id = $(this).attr("data-id");
+        $.post("/getRecommendedMeetings/"+id, {}, function (data){
+
+          if(!data){
+            $(".listOfMeetings").html('По данной теме нет никаких мероприятий');
+          } else {
+          $(".listOfMeetings").html(data);
+        }
         });
+        return false;
       });
-    </script>
+    });
+  </script>
+
 </body>
 </html>

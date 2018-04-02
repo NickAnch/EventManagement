@@ -25,7 +25,7 @@
             $db = Db::getConnection();
             $meetingsList = array();
 
-            $query = 'select id, title, description from meetings where closeMeetup = 0 order by id DESC '
+            $query = 'select id, title, description, date, city, place from meetings where closeMeetup = 0 order by id DESC '
                     . ' limit '.self::SHOW_BY_DEFAULT
                     .' offset '. $offset;
 
@@ -36,6 +36,9 @@
                 $meetingsList[$i]['id'] = $row['id'];
                 $meetingsList[$i]['title'] = $row['title'];
                 $meetingsList[$i]['description'] = $row['description'];
+                $meetingsList[$i]['city'] = $row['city'];
+                $meetingsList[$i]['place'] = $row['place'];
+                $meetingsList[$i]['date'] = $row['date'];
                 $i++;
 
             }
@@ -158,7 +161,7 @@
 
             $meetingsLatestList = array();
 
-            $query = 'select id, title, description from meetings where closeMeetup = 0 order by id DESC limit '.$count ;
+            $query = 'select id, title, description, date, city, place from meetings where closeMeetup = 0 order by id DESC limit '.$count ;
 
             $result = $db->query($query);
 
@@ -166,6 +169,9 @@
             while($row = $result->fetch()){
                 $meetingsLatestList[$i]['id'] = $row['id'];
                 $meetingsLatestList[$i]['title'] = $row['title'];
+                $meetingsLatestList[$i]['date'] = $row['date'];
+                $meetingsLatestList[$i]['city'] = $row['city'];
+                $meetingsLatestList[$i]['place'] = $row['place'];
                 $meetingsLatestList[$i]['description'] = $row['description'];
                 $i++;
 
@@ -220,7 +226,7 @@
         public static function getRecMeetings($city,$int_id){
           $db = Db::getConnection();
 
-          $sql = 'SELECT id,title,description FROM meetings WHERE theme='.$int_id.' and city="'.$city.'" and closeMeetup=0;';
+          $sql = 'SELECT id,title,description FROM meetings WHERE theme='.$int_id.' AND city="'.$city.'" and closeMeetup=0;';
 
           $result = $db->query($sql);
           $string = '';

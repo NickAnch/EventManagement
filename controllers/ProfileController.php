@@ -11,8 +11,10 @@ class ProfileController{
     $themes = User::getChosenInterests($userId);
     $OrgMeetings = Meetings::getOrganizedMeetings($userId);
     $PerMeetings = Meetings::getPersonsMeetings($userId);
+
     require_once(ROOT. '/views/profile/index.php');
     return true;
+
   }
 
   public function actionManageInterests(){
@@ -23,6 +25,7 @@ class ProfileController{
 
     require_once(ROOT. '/views/profile/manageInterests.php');
     return true;
+
   }
 
   public function actionEventNotifications(){
@@ -32,6 +35,7 @@ class ProfileController{
 
     require_once(ROOT. '/views/profile/eventNotifications.php');
     return true;
+
   }
 
   public function actionDeleteInterest($id){
@@ -41,6 +45,7 @@ class ProfileController{
 
     $referrer = $_SERVER['HTTP_REFERER'];
     header("Location: $referrer");
+
   }
   public function actionAddInterest($id){
 
@@ -49,6 +54,7 @@ class ProfileController{
 
     $referrer = $_SERVER['HTTP_REFERER'];
     header("Location: $referrer");
+
   }
 }
 

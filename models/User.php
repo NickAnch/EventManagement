@@ -46,8 +46,23 @@ class User{
         return false;
     }
 
-    public static function auth($userId){
+    public static function getNameOfUser($id){
+        $db = Db::getConnection();
+        $query = 'SELECT name FROM users WHERE id='.$id.';';
+
+        $result = $db->prepare($query);
+        $result->execute();
+
+        $users = $result->fetch();
+        if ($users) {
+            return $users['name'];
+        }
+        return false;
+    }
+
+    public static function auth($userId, $nameOfUser){
       $_SESSION['user'] = $userId;
+      $_SESSION['name'] = $nameOfUser;
     }
 
     public static function checkLogged(){
@@ -56,6 +71,13 @@ class User{
       }
 
       header ("Location: /user/login");
+    }
+
+    public static function getLoggedID(){
+      if (isset($_SESSION['user'])){
+        return $_SESSION['user'];
+      }
+
     }
 
     public static function isGuest(){
@@ -73,7 +95,7 @@ class User{
         // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
         $result->bindParam(':id', $id, PDO::PARAM_INT);
-        // Указываем, что хотим получить данные в виде массива
+        // получить данные в виде массива
         $result->setFetchMode(PDO::FETCH_ASSOC);
         $result->execute();
         return $result->fetch();
@@ -106,7 +128,7 @@ class User{
         $interestsList = array();
 
         $sql = 'DELETE FROM chosen_interests WHERE user_id ='.$userId.' and interest_id='.$id .';';
-        
+
         $result = $db->prepare($sql);
 
         return $result->execute();
@@ -172,7 +194,7 @@ class User{
         $notificationsList = array();
 
         $query = 'SELECT invitations.meeting_id,meetings.creater_id,meetings.title, '
-        .'meetings.description,users.name,users.surname  FROM meetings INNER JOIN invitations '
+        .'meetings.description,meetings.city, meetings.place,meetings.date,users.name,users.surname  FROM meetings INNER JOIN invitations '
         .'ON meetings.id = invitations.meeting_id '
         .'INNER JOIN users ON users.id = meetings.creater_id WHERE invitations.invited_id='.$userId.' ;';
         $result = $db->query($query);
@@ -182,6 +204,9 @@ class User{
           $notificationsList[$i]['creater_id'] = $row['creater_id'];
           $notificationsList[$i]['name'] = $row['name'];
           $notificationsList[$i]['surname'] = $row['surname'];
+          $notificationsList[$i]['city'] = $row['city'];
+          $notificationsList[$i]['place'] = $row['place'];
+          $notificationsList[$i]['date'] = $row['date'];
           $notificationsList[$i]['meeting_id'] = $row['meeting_id'];
           $notificationsList[$i]['title'] = $row['title'];
           $notificationsList[$i]['description'] = $row['description'];

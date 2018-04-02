@@ -17,7 +17,8 @@ class MeetingsController {
 
     public function actionView($id){
         if ($id) {
-            $userId = User::checkLogged();
+            $userId = User::getLoggedID();
+            //$userId = User::checkLogged();
             $isInvited = User::isInvitedOnMeeup($userId, $id);
             print_r ($isInvited);
             $meetingItem = Meetings::getMeetingByID($id);

@@ -51,15 +51,16 @@
       $result = false;
 
       if (isset($_POST['doRegistr'])){
-        $name = $_POST['name'];
+        $name = $_POST['names'];
         $surname = $_POST['surname'];
         $email = $_POST['email'];
-        $city = $_POST['city'];
+        $citySearch = $_POST['city'];
+        $city = $_POST['locality'];
         $pass = $_POST['pass'];
-
+        //extract($_POST);
         $error = false;
         if (User::checkEmailExists($email)){
-          $error[] = 'Такой email занят';
+          $error[] = 'Такой email уже занят';
         }
 
         if ($error == false) {
@@ -82,10 +83,11 @@
         $error = false;
 
         $userId = User::checkUserData($email,$pass);
+        $nameOfUser = User::getNameOfUser($userId);
         if($userId == false){
           $error[] = 'Неправильно ввели email или пароль';
         } else {
-          User::auth($userId);
+          User::auth($userId, $nameOfUser);
 
           header("Location: /profile/");
         }
