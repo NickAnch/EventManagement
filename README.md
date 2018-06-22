@@ -1,2 +1,2 @@
 # EventManagement
-Project in development
+Diploma
