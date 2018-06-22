@@ -22,7 +22,7 @@
           <div class="card create">
             <h1 class="card-header">Авторизация</h5>
             <div class="card-body">
-              <form action="#" method="post" class="needs-validation" novalidate>
+              <form action="" method="post" class="needs-validation" novalidate>
                 <?php if(isset($error) && is_array($error)) : ?>
                 <ul>
                   <?php foreach ($error as $err): ?>

@@ -24,7 +24,7 @@
         <div class="card create">
           <h1 class="card-header">Создание мероприятия</h1>
           <div class="card-body">
-            <form action="#" method="post" class="mapDetail needs-validation" novalidate>
+            <form action="#" method="post" class="mapDetail needs-validation" enctype="multipart/form-data" novalidate>
               <?php if (User::isGuest()): ?>
                 <p>Для того, чтобы создать мероприятие, вам необходимо войти в систему</p>
                 <a href="/user/register/">Регистрация</a><br>
@@ -109,6 +109,12 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group row">
+              <label class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-form-label">Фото</label>
+              <div class="col-xl-10  col-lg-10 col-md-10 col-sm-12">
+              <input type="file" name="image" class="form-control" placeholder="" >
+              </div>
+            </div>
               <div class="form-check ">
                 <input name= "closeMeetup" type="checkbox" class="form-check-input">
                 <label class="form-check-label" >Скрытое мероприятие</label>

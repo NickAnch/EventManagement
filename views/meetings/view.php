@@ -13,7 +13,7 @@
      .card-img-top {
         color: #fff;
         height: 22rem;
-        background: url(/template/img/im.jpg) center no-repeat;
+        background: url(<?php echo Meetings::getMeetImage($meetingItem['id']);?>) center no-repeat;
         background-size: cover;
       }
       .addMemb,
@@ -23,14 +23,23 @@
       .descr{
         margin-top: 10px;
       }
+      p.un{
+        margin-top: 10px;
+        margin-left: 15px;
+      }
       </style>
 </head>
 <body>
   <?php include ROOT.'/views/layout/header.php';?>
   <div class="container">
   <h1><?php echo $meetingItem['title']?></h1>
-  <?php if($meetingItem['closeMeetup'] == 1 && $isInvited[0]['count'] == 0 && $organizer[0]['creater_id'] != $userId): ?>
-    <p>Это закрытое мероприятие, его просмотр возможен только по приглашению</p>
+  <?php if($organizer[0]['creater_id'] == $userId): ?>
+    <div class="alert alert-info" role="alert">Вы организатор данного мероприятия.<br>
+      <a href="/editMeeting/<?php echo $meetingItem['id'];?>" class="alert-link">Изменить</a> информацию о нем.</div>
+  <?php endif; ?>
+  <?php if($meetingItem['closeMeetup'] == 1 && $isInvited[0]['count'] == 0
+            && $member[0]['count'] != 1 && $organizer[0]['creater_id'] != $userId): ?>
+    <p>Это закрытое мероприятие, его просмотр возможен только по приглашению!</p>
   <?php else: ?>
     <div>
       <section>
@@ -47,7 +56,8 @@
                 <?php else: ?>
                   <p class="card-text"><b>Это закрытое мероприятие</b></p>
                 <?php endif; ?>
-                <p class="card-text"><b>Время: </b> <?php echo $meetingItem['date'] ?> </p>
+                <p class="card-text"><b>Время: </b> <?php echo $meetingItem['date'];?> </p>
+                <p class="card-text"><b>Тема мероприятия: </b> <span class="badge badge-info"><?php echo $meetingItem['name_interest'] ?> </span></p>
                 <p class="card-text"><b>Организатор:</b>
                   <a  href="/user/<?php echo $organizer[0]['creater_id'];?>">
                     <?php echo $organizer[0]['name'].' '.$organizer[0]['surname'];?>
@@ -80,11 +90,21 @@
                 <div>
                   <?php if($member[0]['count'] == 0): ?>
                   <div class="manageMembers">
-                    <a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb btn btn-success ">Я пойду</a>
+                    <a href="/addMember/<?php echo $meetingItem['id'] ?>" class="addMemb btn btn-success ">
+                      <?php
+                        $date = date('Y-m-d H:i:s');
+                        if ($meetingItem['date'] > $date){echo "Я пойду";} else {echo "Я ходил";}
+                        ?>
+                    </a>
                   </div>
                   <?php else: ?>
                   <div class="manageMembers">
-                    <a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb btn btn-danger">Я не пойду</a>
+                    <a href="/deleteMember/<?php echo $meetingItem['id'] ?>" class="delMemb btn btn-danger">
+                      <?php
+                        $date = date('Y-m-d H:i:s');
+                        if ($meetingItem['date'] > $date){echo "Я не пойду";} else {echo "Я не ходил";} 
+                        ?>
+                    </a>
                   </div>
                   <?php endif; ?>
                 </div>
@@ -115,9 +135,13 @@
               Участники
             </div>
             <ul class="list-group list-group-flush">
+            <?php if ($usersList): ?>
               <?php foreach ($usersList as $value): ?>
                 <li class="list-group-item"><a href="/user/<?php echo $value['user_id'];?>"><?php echo $value['name'].' '.$value['surname'];?> </a></li>
               <?php endforeach; ?>
+            <?php else: ?>
+              <p class="un">В данном мероприятии пока никто не участвует.</p>
+            <?php endif; ?>
             </ul>
           </div>
         </div>
@@ -141,24 +165,6 @@
     }
   </script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAFnBJcgPWmhAtB6KIaEc63gZUz3i0jrZk&callback=initMap"></script>
-  <script>
-    $(document).ready(function(){
-      $(document.body).on("click",".addMeymb", function(){
-        var id = $(this).attr("data-id");
-        $.post("/addMember/"+id, {}, function (data){
-          $(".manageMembers").html(data);
-        });
-        return false;
-      });
 
-      $(document.body).on("click",".delMeymb", function(){
-        var id = $(this).attr("data-id");
-        $.post("/deleteMember/"+id, {}, function (data){
-          $(".manageMembers").html(data);
-        });
-        return false;
-      });
-    });
-  </script>
 </body>
 </html>

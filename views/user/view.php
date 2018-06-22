@@ -9,8 +9,8 @@
   .card-img-top {
      color: #f6f6f6;
      width: auto;
-     height: 22rem;
-     background: url(/template/img/dd.JPG) center no-repeat;
+     height: 30rem;
+     background: url(<?php echo User::getUserImage($userItem['id']);?>) center no-repeat;
      background-size: cover;
    }
    span.badge{
@@ -66,7 +66,7 @@
             <li class="list-group-item"><a href="/meetings/<?php echo $value['meeting_id'];?>"><?php echo $value['title'];?> </a></li>
             <?php endforeach; ?>
           <?php else: ?>
-            <p class="un">Данный пользователь не учтасвует ни в одном мероприятии.</p>
+            <p class="un">Данный пользователь не участвует ни в одном мероприятии.</p>
           <?php endif; ?>
           </ul>
         </div>

@@ -15,7 +15,7 @@
           $OrgMeetings = Meetings::getOrganizedMeetings($id);
           $Meetings = Meetings::getPersonsMeetings($id);
           $themes = User::getChosenInterests($id);
-          echo $userId;
+          
           require_once(ROOT . '/views/user/view.php');
 
       }
@@ -25,10 +25,11 @@
     public function actionInviteUser($invitedId){
       $userId = User::checkLogged();
       $meetingsList = array();
+      $meetingsListPar = array();
+      $invitedId = intval($invitedId);
       $meetingsList = Meetings::getAvailableOrganizedMeetings($userId,$invitedId);
-      echo $userId;
-      echo $invitedId;
-      print_r ($meetingsList);
+      $meetingsListPar = Meetings::getAvailableMeetings($userId,$invitedId);
+      $invitedName = User::getNameOfUser($invitedId);
 
       require_once(ROOT . '/views/user/inviteUser.php');
       return true;
@@ -57,7 +58,7 @@
         $citySearch = $_POST['city'];
         $city = $_POST['locality'];
         $pass = $_POST['pass'];
-        //extract($_POST);
+
         $error = false;
         if (User::checkEmailExists($email)){
           $error[] = 'Такой email уже занят';
@@ -65,7 +66,7 @@
 
         if ($error == false) {
             $result = User::register($name, $surname, $email, $city, $pass);
-            //header("Location: /user/login/");
+            header("Location: /user/login");
         }
       }
 
@@ -89,7 +90,7 @@
         } else {
           User::auth($userId, $nameOfUser);
 
-          header("Location: /profile/");
+          header("Location: /profile");
         }
       }
       require_once(ROOT. '/views/user/login.php');

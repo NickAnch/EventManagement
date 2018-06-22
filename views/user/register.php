@@ -15,6 +15,9 @@
       .create{
         margin-top: 15px;
       }
+      .form-check{
+        margin-bottom: 15px;
+      }
     </style>
 </head>
 <body>
@@ -35,7 +38,7 @@
                 <?php endforeach; ?>
               </ul>
             <?php endif; ?>
-            <form action="#" method="post" class="needs-validation" novalidate>
+            <form action="" method="post" class="needs-validation" novalidate>
               <div class="form-group row">
                 <label for="name" class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-form-label">Имя</label>
                 <div class="col-xl-10  col-lg-10 col-md-10 col-sm-12">
@@ -91,6 +94,13 @@
                   <div class="invalid-feedback">
                     Введите пароль, не менее 6 символов.
                   </div>
+                </div>
+              </div>
+              <div class="form-check ">
+                <input name= "agreement" type="checkbox" class="form-check-input" required>
+                <label class="form-check-label" >Я согласен на обработку персональных данных</label>
+                <div class="invalid-feedback">
+                  Необходимо подтвердить соглашение.
                 </div>
               </div>
               <div class="form-group row">

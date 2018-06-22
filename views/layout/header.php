@@ -13,8 +13,8 @@ include_once ROOT. '/models/User.php';
       <div>
         <ul class="navbar-nav">
             <li class="nav-item"><a href="/" class="nav-link">Главная</a></li>
-            <li class="nav-item"><a href="/meetings/" class="nav-link">Мероприятия</a></li>
-            <li class="nav-item"><a href="/createMeeting/" class="nav-link">Создать встречу</a></li>
+            <li class="nav-item"><a href="/meetings/" class="nav-link">Поиск</a></li>
+            <li class="nav-item"><a href="/createMeeting/" class="nav-link">Создать мероприятие</a></li>
             <?php if ( !(User::isGuest()) ): ?>
             <li class="nav-item"><a href="/recommendation/" class="nav-link">Рекомендации</a></li>
             <?php endif; ?>
@@ -29,6 +29,9 @@ include_once ROOT. '/models/User.php';
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <?php echo $_SESSION['name']; ?>
+                    <?php if (User::getCountOfNotifications($_SESSION['user']) > 0 ):?>
+                       <span class="badge badge-info"><?php echo User::getCountOfNotifications($_SESSION['user']);?></span>
+                    <?php endif;?>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/profile/">Мой профиль</a>

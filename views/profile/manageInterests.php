@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Управление интересами</title>
     <link rel="stylesheet" href="/template/css/bootstrap.css">
+    <style media="screen">
+      p.un{
+        margin-top: 10px;
+        margin-left: 15px;
+      }
+    </style>
 </head>
 <body>
   <?php include ROOT.'/views/layout/header.php';?>
@@ -12,16 +18,18 @@
     <h1>Личный профиль</h1>
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link" href="/profile/">Моя страница</a>
+        <a class="nav-link" href="/profile">Моя страница</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Изменить информацию о себе</a>
+        <a class="nav-link" href="/edit">Изменить информацию о себе</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" href="/manageInterests/">Редактировать интересы</a>
+        <a class="nav-link active" href="/manageIneterests">Редактировать интересы</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/eventNotifications/">Оповещения</a>
+        <a class="nav-link" href="/eventNotifications">Оповещения
+          <span class="badge badge-dark"><?php echo User::getCountOfNotifications($userId);?></span>
+        </a>
       </li>
     </ul>
     <h2>Управление интересами</h1>
@@ -55,40 +63,14 @@
               </li>
             <?php endforeach; ?>
             <?php else: ?>
-            <p class="un">Данный пользователь не организовал ни одного мероприятия.</p>
+            <p class="un">Вы не выбрали ни одного интереса</p>
           <?php endif; ?>
           </ul>
         </div>
       </div>
     </div>
     </div>
-    <script>
-      $(document).ready(function(){
-        $(document.body).on("click",".deleteIntt", function(){
-          var id = $(this).attr("data-id");
-          $.post("/deleteInterest/"+id, {}, function (data){
-
-            $(".listOfInterests").html(data);
-            $(".listOfInterests li.itemOfAvailable").remove();
-            $(".availableInterests").html(data);
-            $(".availableInterests li.itemOfInterest").remove();
-          });
-          return false;
-        });
-
-        $(document.body).on("click",".addIntt", function(){
-          var id = $(this).attr("data-id");
-          $.post("/addInterest/"+id, {}, function (data){
-
-            $(".availableInterests").html(data);
-            $(".availableInterests li.itemOfInterest").remove();
-            $(".listOfInterests").html(data);
-            $(".listOfInterests li.itemOfAvailable").remove();
-          });
-          return false;
-        });
-      });
-    </script>
+    
     <?php include ROOT.'/views/layout/footer.php';?>
 </body>
 </html>

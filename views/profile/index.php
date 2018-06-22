@@ -9,10 +9,10 @@
     .card-img-top {
        color: #f6f6f6;
        height: 30rem;
-       background: url(/template/img/hh.jpg) center no-repeat;
+       background: url(<?php echo User::getUserImage($user['id']);?>) center no-repeat;
        background-size: cover;
      }
-     span.badge{
+     span.badge-info.inter{
        font-size: 15px;
      }
      p.city{
@@ -33,16 +33,18 @@
     <h1>Личный профиль</h1>
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link active" href="/profile/">Моя страница</a>
+        <a class="nav-link active" href="/profile">Моя страница</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Изменить информацию о себе</a>
+        <a class="nav-link" href="/edit">Изменить информацию о себе</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/manageInterests/">Редактировать интересы</a>
+        <a class="nav-link" href="/manageInterests">Редактировать интересы</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/eventNotifications/">Оповещения</a>
+        <a class="nav-link" href="/eventNotifications">Оповещения
+          <span class="badge badge-dark"><?php echo User::getCountOfNotifications($userId);?></span>
+        </a>
       </li>
     </ul>
     <div class="card">
@@ -57,7 +59,7 @@
             <p class="card-text"><b>Интересы:</b> </p>
             <div>
               <?php foreach ($themes as $value): ?>
-              <span class="badge badge-info">
+              <span class="badge badge-info inter">
                 <?php echo $value['name_interest'].' '; ?>
               </span>
               <?php endforeach; ?>
@@ -79,7 +81,7 @@
                 <li class="list-group-item"><a href="/meetings/<?php echo $value['meeting_id'];?>"><?php echo $value['title'];?> </a></li>
               <?php endforeach; ?>
             <?php else: ?>
-              <p class="un">Данный пользователь не учтасвует ни в одном мероприятии.</p>
+              <p class="un">Вы не участвуете ни в одном мероприятии.</p>
             <?php endif; ?>
           </ul>
         </div>
@@ -95,7 +97,7 @@
                 <li class="list-group-item"><a href="/meetings/<?php echo $value['id'];?>"><?php echo $value['title'];?> </a></li>
               <?php endforeach; ?>
             <?php else: ?>
-              <p class="un">Данный пользователь не организовал ни одного мероприятия.</p>
+              <p class="un">Вы не организовали ни одного мероприятия.</p>
             <?php endif; ?>
           </ul>
         </div>

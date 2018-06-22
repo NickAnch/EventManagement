@@ -17,6 +17,22 @@ class User{
          return $result->execute();
     }
 
+    public static function edit($id, $name, $surname, $city, $pass){
+        $db = Db::getConnection();
+
+        $sql = "UPDATE users
+                SET name = :name, surname = :surname, city = :city, password = :password
+                WHERE id = :id";
+
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->bindParam(':name', $name, PDO::PARAM_STR);
+        $result->bindParam(':surname', $surname, PDO::PARAM_STR);
+        $result->bindParam(':city', $city, PDO::PARAM_STR);
+        $result->bindParam(':password', $pass, PDO::PARAM_STR);
+        return $result->execute();
+    }
+
     public static function checkEmailExists($email){
         $db = Db::getConnection();
         $query = 'select count(*) from users where email = :email';
@@ -92,10 +108,8 @@ class User{
         $db = Db::getConnection();
 
         $sql = 'SELECT * FROM users WHERE id = :id';
-        // Получение и возврат результатов. Используется подготовленный запрос
         $result = $db->prepare($sql);
         $result->bindParam(':id', $id, PDO::PARAM_INT);
-        // получить данные в виде массива
         $result->setFetchMode(PDO::FETCH_ASSOC);
         $result->execute();
         return $result->fetch();
@@ -115,7 +129,7 @@ class User{
     public static function addInvitedMember($userId, $meetId, $invitedId){
       $db = Db::getConnection();
 
-      $sql = 'INSERT INTO invitations (creator_id, invited_id, meeting_id) '
+      $sql = 'INSERT INTO invitations (inviter_id, invited_id, meeting_id) '
                  . ' VALUES ('.$userId.', '.$invitedId.','.$meetId.');';
 
       $result = $db->prepare($sql);
@@ -129,6 +143,15 @@ class User{
 
         $sql = 'DELETE FROM chosen_interests WHERE user_id ='.$userId.' and interest_id='.$id .';';
 
+        $result = $db->prepare($sql);
+
+        return $result->execute();
+    }
+
+    public static function deleteNotification($userId, $id){
+        $db = Db::getConnection();
+
+        $sql = 'DELETE FROM invitations WHERE invited_id ='.$userId.' AND meeting_id='.$id .';';
         $result = $db->prepare($sql);
 
         return $result->execute();
@@ -171,37 +194,20 @@ class User{
         return $interestsList;
       }
 
-      public static function getAllInterests(){
-        $db = Db::getConnection();
-        $interestsList = array();
-
-        $query = 'SELECT * FROM interests';
-        $result = $db->query($query);
-
-        $i=0;
-        while($row = $result->fetch()){
-          $interestsList[$i]['id'] = $row['id'];
-          $interestsList[$i]['name_interest'] = $row['name_interest'];
-          $i++;
-        }
-
-        return $interestsList;
-
-      }
-
       public static function getNotifications($userId){
         $db = Db::getConnection();
         $notificationsList = array();
 
-        $query = 'SELECT invitations.meeting_id,meetings.creater_id,meetings.title, '
-        .'meetings.description,meetings.city, meetings.place,meetings.date,users.name,users.surname  FROM meetings INNER JOIN invitations '
+        $query = 'SELECT invitations.meeting_id, invitations.inviter_id,meetings.title, '
+        .'meetings.id, meetings.description,meetings.city, meetings.place,meetings.date,users.name,users.surname  FROM meetings INNER JOIN invitations '
         .'ON meetings.id = invitations.meeting_id '
-        .'INNER JOIN users ON users.id = meetings.creater_id WHERE invitations.invited_id='.$userId.' ;';
+        .'INNER JOIN users ON users.id = invitations.inviter_id WHERE invitations.invited_id='.$userId.' ;';
         $result = $db->query($query);
 
         $i=0;
         while($row = $result->fetch()){
-          $notificationsList[$i]['creater_id'] = $row['creater_id'];
+          $notificationsList[$i]['id'] = $row['id'];
+          $notificationsList[$i]['inviter_id'] = $row['inviter_id'];
           $notificationsList[$i]['name'] = $row['name'];
           $notificationsList[$i]['surname'] = $row['surname'];
           $notificationsList[$i]['city'] = $row['city'];
@@ -223,6 +229,28 @@ class User{
         $result = $db->prepare($sql);
         $result->execute();
         return $result->fetchAll();
+      }
+
+      public static function getCountOfNotifications($id){
+        $db = Db::getConnection();
+
+        $sql = 'SELECT COUNT(*) as count FROM invitations WHERE invited_id='.$id.';';
+
+        $result = $db->prepare($sql);
+        $result->execute();
+        return $result->fetchColumn();
+      }
+
+      public static function getUserImage($id){
+          // Название изображения-пустышки
+          $noImage = 'no-image.jpg';
+
+          $path = '/upload/images/users/';
+          $pathToProductImage = $path . $id . '.jpg';
+          if (file_exists($_SERVER['DOCUMENT_ROOT'].$pathToProductImage)) {
+              return $pathToProductImage;
+          }
+          return $path . $noImage;
       }
 
 }
